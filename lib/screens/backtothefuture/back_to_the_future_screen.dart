@@ -17,7 +17,7 @@ class BackToTheFutureScreen extends StatefulWidget {
 
 class _BackToTheFutureScreenState extends State<BackToTheFutureScreen> {
   Timer _timer;
-  BackToTheFutureModel model;
+  BackToTheFutureModel _model;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class _BackToTheFutureScreenState extends State<BackToTheFutureScreen> {
       },
       child: Consumer<BackToTheFutureModel>(
           builder: (context, BackToTheFutureModel model, child) {
-        this.model = model;
+        this._model = model;
         return Container(
           color: Colors.black,
           child: Column(
@@ -81,7 +81,7 @@ class _BackToTheFutureScreenState extends State<BackToTheFutureScreen> {
   @override
   void dispose() {
     super.dispose();
-    model.dispose();
+    _model.dispose();
     _timer.cancel();
   }
 }
@@ -151,7 +151,7 @@ class _BackToTheFutureWidgetState extends State<BackToTheFutureWidget>
       children: <Widget>[
         panelButton(
             "HOUR", Colors.red[900], widget.timeLapse.hour, Colors.black, 75.0),
-        twoPoints(),
+        hoursAndMinutesSeparator(),
         panelButton("MIN", Colors.red[900], widget.timeLapse.minutes,
             Colors.black, 75.0),
       ],
@@ -239,7 +239,7 @@ class _BackToTheFutureWidgetState extends State<BackToTheFutureWidget>
     );
   }
 
-  Widget twoPoints() {
+  Widget hoursAndMinutesSeparator() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 7.5),
       child: Column(

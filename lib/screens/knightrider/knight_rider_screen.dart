@@ -99,7 +99,7 @@ class CentralPanel extends StatelessWidget {
       },
       child: Column(
         children: [
-          Expanded(flex: 55, child: voicePanel()),
+          Expanded(flex: 55, child: VoicePanel()),
           Expanded(
             flex: 45,
             child: Column(
@@ -109,7 +109,7 @@ class CentralPanel extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     threePanels(),
-                    modeButton(),
+                    ModeSelectorPanel(),
                   ],
                 ),
               ],
@@ -118,10 +118,6 @@ class CentralPanel extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Widget voicePanel() {
-    return VoicePanel();
   }
 
   Widget threePanels() {
@@ -135,33 +131,29 @@ class CentralPanel extends StatelessWidget {
       ],
     );
   }
-
-  Widget modeButton() {
-    return ModeButtonsPanel();
-  }
 }
 
-class ModeButtonsPanel extends StatefulWidget {
+class ModeSelectorPanel extends StatefulWidget {
   @override
-  _ModeButtonsPanelState createState() => _ModeButtonsPanelState();
+  _ModeSelectorPanelState createState() => _ModeSelectorPanelState();
 }
 
-class _ModeButtonsPanelState extends State<ModeButtonsPanel> {
+class _ModeSelectorPanelState extends State<ModeSelectorPanel> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        modeButton(Mode.normal_cruise, "NORMAL CRUISE",
+        modeSelector(Mode.normal_cruise, "NORMAL CRUISE",
             Color.fromRGBO(14, 255, 0, 1.0)),
-        modeButton(Mode.auto_cruise, "AUTO CRUISE", Colors.yellow),
-        modeButton(Mode.pursuit, "PURSUIT", Colors.red),
+        modeSelector(Mode.auto_cruise, "AUTO CRUISE", Colors.yellow),
+        modeSelector(Mode.pursuit, "PURSUIT", Colors.red),
       ],
     );
   }
 
-  Widget modeButton(Mode mode, String label, Color color) {
+  Widget modeSelector(Mode mode, String label, Color color) {
     return GestureDetector(
-        child: ModeButton(mode, label, color),
+        child: ModeSelector(mode, label, color),
         onTap: () {
           setState(() {
             Provider.of<KnightRiderModel>(context, listen: false).setMode(mode);
@@ -170,18 +162,18 @@ class _ModeButtonsPanelState extends State<ModeButtonsPanel> {
   }
 }
 
-class ModeButton extends StatefulWidget {
+class ModeSelector extends StatefulWidget {
   final Mode mode;
   final String label;
   final Color bgColor;
 
-  ModeButton(this.mode, this.label, this.bgColor);
+  ModeSelector(this.mode, this.label, this.bgColor);
 
   @override
-  _ModeButtonState createState() => _ModeButtonState();
+  _ModeSelectorState createState() => _ModeSelectorState();
 }
 
-class _ModeButtonState extends State<ModeButton> {
+class _ModeSelectorState extends State<ModeSelector> {
   @override
   Widget build(BuildContext context) {
     return Consumer<KnightRiderModel>(
@@ -221,7 +213,7 @@ class VoicePanel extends StatefulWidget {
 }
 
 class _VoicePanelState extends State<VoicePanel> with TickerProviderStateMixin {
-  KnightRiderModel model;
+  KnightRiderModel _model;
 
   AnimationController _animationController;
   Animation<double> _voicePanelAnimation;
@@ -238,7 +230,7 @@ class _VoicePanelState extends State<VoicePanel> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Consumer<KnightRiderModel>(
         builder: (context, KnightRiderModel model, child) {
-      this.model = model;
+      this._model = model;
       triggerAnimationIfNeeded();
       return Container(
         alignment: Alignment.bottomCenter,
@@ -269,7 +261,7 @@ class _VoicePanelState extends State<VoicePanel> with TickerProviderStateMixin {
         builder: (context, child) {
           int offset = column == 1 ? 2 : 0;
           List<int> lightsToEnable =
-              model.lightsToEnable(_voicePanelAnimation.value, offset);
+              _model.lightsToEnable(_voicePanelAnimation.value, offset);
           return Opacity(
             opacity: lightsToEnable.contains(index) ? 1.0 : 0.2,
             child: Container(
@@ -297,11 +289,11 @@ class _VoicePanelState extends State<VoicePanel> with TickerProviderStateMixin {
   }
 
   void triggerAnimationIfNeeded() {
-    if (model.currentMode == Mode.pursuit) {
-      model.playMainTheme();
+    if (_model.currentMode == Mode.pursuit) {
+      _model.playMainTheme();
       _animationController.forward();
     } else {
-      model.stopPlaying();
+      _model.stopPlaying();
       _animationController.stop();
     }
   }
@@ -309,7 +301,7 @@ class _VoicePanelState extends State<VoicePanel> with TickerProviderStateMixin {
   @override
   void dispose() {
     super.dispose();
-    model.stopPlaying();
+    _model.stopPlaying();
     _animationController.dispose();
   }
 }
