@@ -1,16 +1,12 @@
 # retro_tv_cars
 
-A new Flutter project.
+A new Flutter web created for [Flutter hackaton 2020](https://flutterhackathon.com)
 
-## Getting Started
+## What can I have found in this project?
 
-This project is a starting point for a Flutter application.
+I have recreated the Knight Rider and Delorian control panels.
+Just for fun!
+I don't expect that this project works also for mobile or iOS, probably in the future I will try to make UI responsive to all platforms.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+You can see the results here: 
+[Retro TV CARS](https://retrotvcarshack20.web.app)
